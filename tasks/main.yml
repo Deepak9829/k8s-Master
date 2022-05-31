@@ -137,3 +137,44 @@
   shell: "sudo yum install git -y"
   register: gitins
   ignore_errors: yes
+
+- name: Install HTTPD webserver
+  package:
+      name: "httpd"
+      state: present
+
+
+- name: Start httpd webserver
+  service:
+       name: "httpd"
+       state: started
+       enabled: yes
+  changed_when: false
+
+- name: "Copying the Webapp files to the Dest" 
+  copy:
+    dest: "/var/www/html"
+    src: "{{ item }}"
+  with_fileglob:
+    - /home/deepaksaini/K8S_MultiNodeCluster/Ansible-Playbook/webapp/*
+
+- name: "Copying the api file" 
+  copy:
+    dest: "/var/www/cgi-bin/"
+    src: "/home/deepaksaini/K8S_MultiNodeCluster/Ansible-Playbook/webapp/info.py"
+
+
+- name: Give the sudo power to apache user 
+  shell: "echo 'apache ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
+  register: apache
+  ignore_errors: yes
+
+- name: Make file executable
+  shell: "chmod ugo+rx /var/www/cgi-bin/info.py"
+  register: executable
+  ignore_errors: yes
+
+- name: Save Public IP
+  shell: "curl http://169.254.169.254/latest/meta-data/public-ipv4 > /home/ec2-user/public-ip.txt"
+  register: ip
+  ignore_errors: yes

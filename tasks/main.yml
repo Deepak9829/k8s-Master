@@ -113,10 +113,10 @@
   run_once: yes
   fetch: src=/home/ec2-user/tokens.sh dest=/home/deepaksaini/ flat=yes
 
-- name: Labeled The Nodes of Kubernets with Roles
-  shell: "kubectl label node $(curl http://169.254.169.254/latest/meta-data/local-hostname)  node-role.kubernetes.io/$(curl http://169.254.169.254/latest/meta-data/tags/instance/Name)=$(curl http://169.254.169.254/latest/meta-data/tags/instance/Name)"
-  register: labeld
-  ignore_errors: yes
+#- name: Labeled The Nodes of Kubernets with Roles
+#  shell: "kubectl label node $(curl http://169.254.169.254/latest/meta-data/local-hostname)  node-role.kubernetes.io/$(curl http://169.254.169.254/latest/meta-data/tags/instance/Name)=$(curl http://169.254.169.254/latest/meta-data/tags/instance/Name)"
+#  register: labeld
+#  ignore_errors: yes
 
 - name: Helm Download
   shell: "wget https://get.helm.sh/helm-v3.4.1-linux-amd64.tar.gz"
